@@ -3,6 +3,6 @@
 \
 **Abstract:**\
 Non-invasive prenatal testing (NIPT) is a crucial screening tool for fetal chromosomal aneuploidies, leveraging cell-free fetal DNA (cffDNA) in maternal blood. The Ion Torrent sequencing platform, with its cost-effective semiconductor technology and Torrent Suite software, presents a promising alternative for NIPT. However, a significant gap exists: the absence of a published, open-source bioinformatics pipeline specifically tailored for Ion Torrent-based NIPT. This hinders accurate sequencing data processing, fetal fraction (ff) estimation, and z-score calculation, all essential for reliable aneuploidy detection. To address this, we developed a comprehensive bioinformatics pipeline, NIPTorrent, using NextFlow. Initially, we constructed a Vietnamese-specific reference dataset and benchmarked key computational methods for ff estimation and z-score calculation, optimizing their performance on Ion Torrent data. Our pipeline enhances accuracy, sensitivity, and data processing efficiency by refining fetal fraction assessment, statistical modeling, and aneuploidy detection. This research provides a validated and reproducible solution, facilitating the clinical integration of Ion Torrent sequencing for NIPT. Consequently, this work contributes to expanding access to cost-effective prenatal screening and improving early fetal risk assessment.\
-\
+
 
 **Keywords:** Non-Invasive Prenatal Testing (NIPT), cell-free fetal DNA (cffDNA), bioinformatics, Torrent Suite, Ion Torrent sequencing platform and open-source bioinformatics pipeline
