@@ -6,7 +6,7 @@ process read_count {
     output:
     path "*.tsv", emit: tsv
     // Publish results
-    publishDir "${params.outdir}/read_count", mode: 'copy'
+    publishDir "${params.output_dir}/read_count", mode: 'copy'
     // Script run
     script:
     """
@@ -18,6 +18,6 @@ process read_count {
         echo \$file >> bam_file.txt
     done
 
-    read_count.py bam_file.txt
+    ${projectDir}/bin/read_count.py bam_file.txt
     """
 }

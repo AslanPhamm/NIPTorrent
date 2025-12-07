@@ -1,38 +1,30 @@
-// process ff_all {
-//     // Calculate read counts from BAM files
-//     input:
-//     path bam_list, stageAs:"bam_list/*"
-//     // Output channels
-//     output:
-//     path "seqff.tsv", emit: tsv
-//     // Publish results
-//     publishDir "${params.outdir}/seqff", mode: 'copy'
-
-//     script:
-//     """
-//      # Set up a safe temporary directory for R/Python tools
-//     export TMPDIR=\$(mktemp -d)
-//     echo "TMPDIR is set to \$TMPDIR"
-    
-//     for file in bam_list/*.bam; do
-//         echo \$file >> bam_file.txt
-//     done
-
-//     seqff.py bam_file.txt
-//     """
-// }
-process ff_all {
+process seqff {
+    // Calculate read counts from BAM files
     input:
-    tuple val(sample_name), path(mapped_bam)
-
+    path bam_files, stageAs:"bam_files/*"
+    // Output channels
     output:
-    tuple val(sample_name), path("${sample_name}.tsv")
-
-    publishDir("${params.outdir}/seqff", mode: 'copy', overwrite: true)
+    path "ff_all.tsv", emit: tsv
+    path "seqff.csv", emit: csv
+    // Publish results
+    publishDir "${params.output_dir}/seqff", mode: 'copy'
 
     script:
     """
-    Rscript ${params.seqff_dir}/seqff.r ${mapped_bam} ${params.seqff_dir} > ${sample_name}.tsv
+    # Set up a safe temporary directory for R/Python tools
+    export TMPDIR=\$(mktemp -d)
+    for file in bam_files/*.bam; do
+        echo \$file >> bam_file.txt
+    done
+    ${projectDir}/bin/seqff.py bam_file.txt
+        python - <<'PY'
+import csv
+
+with open('ff_all.tsv', newline='') as tsv_file, open('seqff.csv', 'w', newline='') as csv_file:
+    reader = csv.reader(tsv_file, delimiter='\t')
+    writer = csv.writer(csv_file)
+    writer.writerows(reader)
+PY
     """
 }
 
