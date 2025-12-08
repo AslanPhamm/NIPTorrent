@@ -1,12 +1,12 @@
 process defrag_b {
     input:
-    tuple path(boy_dir), path(girl_dir), path(gcc), path(pickle)
+    tuple path(boy_dir), path(girl_dir), val(gcc), val(pickle)
     path (gender_csv)
     
     output:
-    path "defrag_b.tsv", emit: tsv
+    path "*.tsv", emit: tsv
     // Publish results
-    publishDir "${params.output_dir}/defrag_b", mode: 'copy'
+    publishDir "${params.outdir}/defrag_b", mode: 'copy'
 
     script:
     """

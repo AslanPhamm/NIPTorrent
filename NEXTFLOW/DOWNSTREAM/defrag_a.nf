@@ -6,10 +6,10 @@ process defrag_a {
     path pickle
     
     output:
-    path "defrag(a).tsv", emit: tsv
+    path "*.tsv", emit: tsv
 
     // Publish results
-    publishDir "${params.output_dir}/defrag_a", mode: 'copy'
+    publishDir "${params.outdir}/defrag_a", mode: 'copy'
 
     script:
     """

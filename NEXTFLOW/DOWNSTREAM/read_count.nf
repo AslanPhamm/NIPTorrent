@@ -6,7 +6,7 @@ process read_count {
     output:
     path "*.tsv", emit: tsv
     // Publish results
-    publishDir "${params.output_dir}/read_count", mode: 'copy'
+    publishDir "${params.outdir}/read_count", mode: 'copy'
     // Script run
     script:
     """

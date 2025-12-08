@@ -14,18 +14,44 @@ seqffdir = assets_dir
 
 def execute_seqff(sample_path):
     """
-    Call SeqFF Rscript to compute ff.
+    Call SeqFF Rscript to compute ff for one BAM file.
 
     :param sample_path: Path to a single BAM file
-    :return: Floating-point FF value
+    :return: Floating-point FF value (as string)
     """
-    cmd = f"samtools view {sample_path} | awk '{{if ($3 != \"chrM\" && $3 != \"*\") print $3\" \"$4}}' | Rscript {r_script} /dev/stdin {seqffdir}"
-    
-    result = subprocess.run(cmd, stdout=subprocess.PIPE, shell=True, text=True)
-    
-    output_lines = result.stdout.split("\n")[1]
+    # Call Rscript with BAM path and seqffdir
+    cmd = [r_exec, r_script, sample_path, seqffdir]
 
-    return output_lines.split()[0]  # Extract FF value
+    result = subprocess.run(
+        cmd,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        text=True,
+    )
+
+    # If R failed, raise a clear error instead of crashing later
+    if result.returncode != 0:
+        raise RuntimeError(
+            f"SeqFF failed for {sample_path} (exit code {result.returncode}).\n"
+            f"Command: {' '.join(cmd)}\n"
+            f"STDERR:\n{result.stderr}"
+        )
+
+    # R prints a named numeric vector like:
+    #   seqff     Enet     WRSC 
+    #  12.3456  11.2345  13.4567
+    lines = [ln for ln in result.stdout.splitlines() if ln.strip()]
+
+    if len(lines) < 2:
+        raise RuntimeError(
+            f"Unexpected SeqFF output for {sample_path}:\n{result.stdout}"
+        )
+
+    value_line = lines[1]              # second line: "12.3456 11.2345 13.4567"
+    ff_value = value_line.split()[0]   # first number = seqff
+
+    return ff_value
+
 
 
 def write_result(sample, ff_value, output_path):
