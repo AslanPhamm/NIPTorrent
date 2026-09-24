@@ -37,21 +37,21 @@ The NIPTorrent workflow consists of **3 independent pipelines** that must be exe
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│                        INPUT DATA                                │
+│                        INPUT DATA                               │
 │                   (Unmapped BAM files)                          │
 └─────────────────────────────────────────────────────────────────┘
                                 │
                                 ▼
 ┌─────────────────────────────────────────────────────────────────┐
-│              PIPELINE 1: REPROCESS                               │
-│  UBAM → FASTQ → Mapping → Sort → Remove Duplicates → Index    │
-│  (BWA-MEM / Bowtie2 / TMAP)                                    │
+│              PIPELINE 1: REPROCESS                              │
+│  UBAM → FASTQ → Mapping → Sort → Remove Duplicates → Index      │
+│  (BWA-MEM / Bowtie2 / TMAP)                                     │
 └─────────────────────────────────────────────────────────────────┘
                     │                       │
                     ▼                       ▼
         ┌───────────────────┐   ┌───────────────────┐
         │   PIPELINE 2:     │   │   PIPELINE 3:     │
-        │   CREATE_REF       │   │   PREDICTION      │
+        │   CREATE_REF      │   │   PREDICTION      │
         │                   │   │                   │
         │   Build reference │   │   Fetal fraction  │
         │   datasets from   │   │   Aneuploidy      │
